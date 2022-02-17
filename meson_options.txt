@@ -1,2 +1,2 @@
-option('testu01_dir', type : 'string', value : '')
+option('testu01_dir', type : 'string', value : '/nonexistent/path')
 

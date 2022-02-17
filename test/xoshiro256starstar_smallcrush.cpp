@@ -1,21 +1,66 @@
 #include "cdecls.hpp"
 
+#include "truncated_generator.hpp"
 #include "xoshiro256starstar.hpp"
 
-static_assert(std::is_same<uint32_t, unsigned long>::value, "Uh oh");
+using namespace stokhos;
 
-unsigned long get_next()
+static_assert(std::is_same<uint32_t, unsigned int>::value, "Uh oh");
+
+uint32_t reverse_bits(uint32_t n)
 {
-    static stokhos::TruncatedGenerator<stokhos::Xoshiro256starstar, uint32_t> rng(
-        stokhos::Xoshiro256starstar());
+    n = ((n >> 1) & 0x55555555) | ((n << 1) & 0xaaaaaaaa);
+    n = ((n >> 2) & 0x33333333) | ((n << 2) & 0xcccccccc);
+    n = ((n >> 4) & 0x0f0f0f0f) | ((n << 4) & 0xf0f0f0f0);
+    n = ((n >> 8) & 0x00ff00ff) | ((n << 8) & 0xff00ff00);
+    n = ((n >> 16) & 0x0000ffff) | ((n << 16) & 0xffff0000);
+    return n;
+}
+
+unsigned int get_next_lower32()
+{
+    static auto rng = TruncatedGenerator<Xoshiro256starstar, uint32_t>(Xoshiro256starstar());
 
     return rng();
 }
 
+unsigned int get_next_upper32()
+{
+    static auto rng = Xoshiro256starstar();
+    constexpr uint64_t mask = static_cast<uint64_t>(static_cast<uint32_t>(-1)) << 32;
+
+    return (rng() & mask >> 32);
+}
+
+unsigned int get_next_lower32_reversed() { return reverse_bits(get_next_lower32()); }
+
+unsigned int get_next_upper32_reversed() { return reverse_bits(get_next_upper32()); }
+
 int main()
 {
-    char name[] = "Lower 32 of xoshiro256starstar";
-    unif01_Gen *gen = unif01_CreateExternGenBitsL(name, get_next);
+    char name1[] = "lower 32 bits of xoshiro256starstar";
+    unif01_Gen *gen = unif01_CreateExternGenBits(name1, get_next_lower32);
 
     bbattery_SmallCrush(gen);
+    unif01_DeleteExternGenBits(gen);
+
+    char name2[] = "upper 32 bits of xoshiro256starstar";
+    gen = unif01_CreateExternGenBits(name2, get_next_upper32);
+
+    bbattery_SmallCrush(gen);
+    unif01_DeleteExternGenBits(gen);
+
+    char name3[] = "lower 32 bits of xoshiro256starstar reversed";
+    gen = unif01_CreateExternGenBits(name3, get_next_lower32_reversed);
+
+    bbattery_SmallCrush(gen);
+    unif01_DeleteExternGenBits(gen);
+
+    char name4[] = "upper 32 bits of xoshiro256starstar reversed";
+    gen = unif01_CreateExternGenBits(name4, get_next_upper32_reversed);
+
+    bbattery_SmallCrush(gen);
+    unif01_DeleteExternGenBits(gen);
+
+    return 0;
 }

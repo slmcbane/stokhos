@@ -30,7 +30,7 @@ T get_bits_from_urandom()
 
     T dst;
     size_t read = fread(&dst, sizeof(T), 1, urandom);
-    if (read != sizeof(T))
+    if (read != 1U)
     {
         throw exception("Number of read bytes from /dev/urandom was less than requested\n");
     }
