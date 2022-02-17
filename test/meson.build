@@ -9,3 +9,7 @@ testu01_lib = cppc.find_library('testu01', dirs : get_option('testu01_dir'), sta
 
 executable('xoshiro256starstar_smallcrush', 'xoshiro256starstar_smallcrush.cpp',
   dependencies : [testu01_mylib, testu01_probdistlib, testu01_lib, stokhos_dep])
+
+executable('xoshiro256starstar_crush', 'xoshiro256starstar_crush.cpp',
+  dependencies : [testu01_mylib, testu01_probdistlib, testu01_lib, stokhos_dep])
+
