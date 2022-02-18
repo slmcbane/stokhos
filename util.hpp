@@ -5,6 +5,13 @@
 #include <exception>
 #include <type_traits>
 
+#include <inttypes.h>
+
+#if __SIZEOF_INT128__
+typedef __uint128_t uint128_t;
+#define STOKHOS_128_BIT
+#endif
+
 namespace stokhos
 {
 

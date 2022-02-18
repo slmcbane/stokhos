@@ -20,5 +20,8 @@ extern "C"
     void bbattery_BigCrush(unif01_Gen *gen);
 
     void unif01_DeleteExternGenBits(unif01_Gen *gen);
+
+    unif01_Gen *unif01_CreateExternGen01(char *name, double (*gen01)(void));
+    void unif01_DeleteExternGen01(unif01_Gen *);
 }
 
