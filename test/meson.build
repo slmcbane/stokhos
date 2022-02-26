@@ -25,3 +25,5 @@ executable('pcg_xsl_rr_mcg_lower32', 'pcg_xsl_rr_mcg_lower32.cpp',
 executable('pcg_xsl_rr_mcg_upper32', 'pcg_xsl_rr_mcg_upper32.cpp',
   dependencies : [testu01_mylib, testu01_probdistlib, testu01_lib, stokhos_dep])
 
+executable('pcg_xsh_rs_lcg', 'pcg_xsh_rs_lcg.cpp',
+  dependencies : [testu01_mylib, testu01_probdistlib, testu01_lib, stokhos_dep])
