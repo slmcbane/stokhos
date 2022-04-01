@@ -37,7 +37,7 @@
 namespace stokhos
 {
 
-class PCG_XSH_RS_LCG : public AbstractRNG<uint32_t, uint64_t, 0, ~((uint32_t) 0)>
+class PCG_XSH_RS_LCG : public AbstractRNG<uint32_t, uint64_t, 0, ~((uint32_t)0)>
 {
   public:
     /*
@@ -46,7 +46,8 @@ class PCG_XSH_RS_LCG : public AbstractRNG<uint32_t, uint64_t, 0, ~((uint32_t) 0)
      * code is derived from the Minimal C Implementation of the PCG generator - see
      * copyright notice at the top of this file.
      */
-    PCG_XSH_RS_LCG(uint64_t init_state, uint64_t stream) : AbstractRNG{(uint64_t) 0}, m_stream{(stream << 1) & 1u}
+    PCG_XSH_RS_LCG(uint64_t init_state, uint64_t stream)
+        : AbstractRNG{(uint64_t)0}, m_stream{(stream << 1) | 1u}
     {
         this->operator()();
         m_state += init_state;
@@ -61,16 +62,16 @@ class PCG_XSH_RS_LCG : public AbstractRNG<uint32_t, uint64_t, 0, ~((uint32_t) 0)
     PCG_XSH_RS_LCG() : AbstractRNG{get_bits_from_urandom<uint64_t>()}, m_stream{0}
     {
         uint64_t x = reinterpret_cast<uint64_t>(this);
-        m_stream = (x << 1) & 1u;
+        m_stream = (x << 1) | 1u;
     }
 
     /*
      * Use a unique stream as above, but provide an initial seed.
      */
-    PCG_XSH_RS_LCG(uint64_t init_state) : AbstractRNG{(uint64_t) 0}, m_stream{0}
+    PCG_XSH_RS_LCG(uint64_t init_state) : AbstractRNG{(uint64_t)0}, m_stream{0}
     {
         uint64_t x = reinterpret_cast<uint64_t>(this);
-        m_stream = (x << 1) & 1u;
+        m_stream = (x << 1) | 1u;
         this->operator()();
         m_state += init_state;
         this->operator()();
